@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
-
-const usdtAddress = '...'; 
-const usdtAbi = [ /*ABI，function */ ];
-
+const usdtAddress = '...'; # address needed not sure been requirest or not 
+const usdtAbi = [ /*ABI，function */ ]; # ABI and function needed function balance0f(address account) extrnal returns (unit256);
 function WalletConnect() {
   const [walletAddress, setWalletAddress] = useState('');
   const [bnbBalance, setBnbBalance] = useState('');
   const [usdtBalance, setUsdtBalance] = useState('');
   const [web3, setWeb3] = useState(null);
-
   const connectWallet = async () => {
     if (window.ethereum) {
       const web3Instance = new Web3(window.ethereum);
@@ -24,24 +21,19 @@ function WalletConnect() {
       alert('Please install MetaMask!');
     }
   };
-
   const fetchBalances = async () => {
     if (!web3 || !walletAddress) return;
-
     const bnb = await web3.eth.getBalance(walletAddress);
     setBnbBalance(web3.utils.fromWei(bnb, 'ether'));
-
     const usdtContract = new web3.eth.Contract(usdtAbi, usdtAddress);
     const usdt = await usdtContract.methods.balanceOf(walletAddress).call();
     setUsdtBalance(web3.utils.fromWei(usdt, 'ether'));
   };
-
   useEffect(() => {
     if (walletAddress) {
       fetchBalances();
     }
   }, [walletAddress, web3]);
-
   return (
     <div>
       <button onClick={connectWallet}>Connect Wallet</button>
@@ -55,5 +47,4 @@ function WalletConnect() {
     </div>
   );
 }
-
 export default WalletConnect;
